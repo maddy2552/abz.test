@@ -36,4 +36,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the Positions created by the User.
+     */
+    public function createdPositions()
+    {
+        return $this->hasMany('App\Position', 'admin_created_id');
+    }
+
+    /**
+     * Get the Positions updated by the User.
+     */
+    public function updatedPositions()
+    {
+        return $this->hasMany('App\Position', 'admin_updated_id');
+    }
 }
