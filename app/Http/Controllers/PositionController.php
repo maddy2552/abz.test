@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePositionRequest;
+use App\Position;
 use Illuminate\Http\Request;
 
 class PositionController extends Controller
@@ -23,7 +25,7 @@ class PositionController extends Controller
      */
     public function create()
     {
-        //
+        return view('positions.create');
     }
 
     /**
@@ -32,9 +34,10 @@ class PositionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePositionRequest $request)
     {
-        //
+        $request->flash();
+        $validatedData = $request->validated();
     }
 
     /**
@@ -79,6 +82,7 @@ class PositionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Position::destroy($id);
+        return redirect()->route('positions.index');
     }
 }

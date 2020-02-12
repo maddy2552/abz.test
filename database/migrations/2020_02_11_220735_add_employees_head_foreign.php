@@ -17,7 +17,7 @@ class AddEmployeesHeadForeign extends Migration
             $table->foreign('head')
                 ->references('id')
                 ->on('employees')
-                ->onDelete('no action');
+                ->onDelete('cascade');
         });
     }
 

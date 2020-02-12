@@ -20,4 +20,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('employees', 'EmployeeController')->middleware('auth');
-Route::resource('positions', 'EmployeeController')->middleware('auth');
+
+Route::get('datatables', 'DatatableController@anyData')->name('datatables.data');
+
+Route::resource('positions', 'PositionController')->middleware('auth');
