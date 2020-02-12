@@ -4,6 +4,7 @@ use App\User;
 use App\Position;
 use App\Employee;
 use Illuminate\Database\Seeder;
+use Faker\Factory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Carbon;
@@ -17,48 +18,32 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class, 10)->create()->each(function ($user) {
+        $faker = Factory::create();
+
+        // Добавил 10 юзеров (админов) с ид от 1 до 10.
+        factory(User::class, 10)->create();
+
+        // Добавляю 20 должностей с ид от 1 до 20, ид админа создавшего/обновившего выбираю от 1 до 10.
+        for ($i = 0; $i < 20; $i++) {
             factory(Position::class, 1)->create([
-                'admin_created_id' => $user->id,
-                'admin_updated_id' => $user->id
-            ])->each(function ($position) use ($user) {
-                $headLevel = 0;
-                for ($i = 0; $i < 5000; $i++)
-                {
-                    if($headLevel == 0)
-                    {
-                        factory(Employee::class, 1)->create([
-                            'position_id' => $position->id,
-                            'admin_created_id' => $user->id,
-                            'admin_updated_id' => $user->id
-                        ]);
-                        $headLevel++;
-                        continue;
-                    }
-                    elseif ($headLevel > 0 && $headLevel <= 4)
-                    {
-                        factory(Employee::class, 1)->create([
-                            'head' => $i,
-                            'position_id' => $position->id,
-                            'admin_created_id' => $user->id,
-                            'admin_updated_id' => $user->id
-                        ]);
-                        $headLevel++;
-                        continue;
-                    }
-                    elseif ($headLevel == 5)
-                    {
-                        factory(Employee::class, 1)->create([
-                            'head' => $i,
-                            'position_id' => $position->id,
-                            'admin_created_id' => $user->id,
-                            'admin_updated_id' => $user->id
-                        ]);
-                        $headLevel = 0;
-                        continue;
-                    }
-                }
-            });
-        });
+                'admin_created_id' => $faker->numberBetween(1, 10),
+                'admin_updated_id' => $faker->numberBetween(1, 10),
+                'created_at' => $faker->dateTime('now', 'Europe/Moscow'),
+            ]);
+        }
+
+        // Добавляю 50к работников, ид админа создавшего/обновившего выбираю от 1 до 10.
+        // Должность выбираю рандомно от 1 до 20.
+        // Уровень подчинения от 0 до 5. 0 - без руководителя. 1-5 - руководитель с ид $i.
+        $headLevel = 0;
+        for ($i = 0; $i < 50000; $i++) {
+            factory(Employee::class, 1)->create([
+                'head' => ($headLevel !== 0) ? $i : null,
+                'position_id' => $faker->numberBetween(1, 20),
+                'admin_created_id' => $faker->numberBetween(1, 10),
+                'admin_updated_id' => $faker->numberBetween(1, 10),
+            ]);
+            $headLevel = ($headLevel == 5) ? 0 : ++$headLevel;
+        }
     }
 }

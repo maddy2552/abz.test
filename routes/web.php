@@ -18,3 +18,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource('employees', 'EmployeeController')->middleware('auth');
+Route::resource('positions', 'EmployeeController')->middleware('auth');

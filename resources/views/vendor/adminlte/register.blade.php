@@ -23,12 +23,9 @@
 
 @section('body')
     <div class="register-box">
-        <div class="register-logo">
-            <a href="{{ $dashboard_url }}">{!! config('adminlte.logo', '<b>Admin</b>LTE') !!}</a>
-        </div>
         <div class="card">
             <div class="card-body register-card-body">
-            <p class="login-box-msg">{{ __('adminlte::adminlte.register_message') }}</p>
+            <p class="login-box-msg">Register</p>
             <form action="{{ $register_url }}" method="post">
                 {{ csrf_field() }}
 

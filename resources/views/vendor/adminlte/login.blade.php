@@ -30,12 +30,9 @@
 
 @section('body')
     <div class="login-box">
-        <div class="login-logo">
-            <a href="{{ $dashboard_url }}">{!! config('adminlte.logo', '<b>Admin</b>LTE') !!}</a>
-        </div>
         <div class="card">
             <div class="card-body login-card-body">
-                <p class="login-box-msg">{{ __('adminlte::adminlte.login_message') }}</p>
+                <p class="login-box-msg">Login</p>
                 <form action="{{ $login_url }}" method="post">
                     {{ csrf_field() }}
                     <div class="input-group mb-3">
@@ -65,31 +62,13 @@
                         @endif
                     </div>
                     <div class="row">
-                        <div class="col-8">
-                            <div class="icheck-primary">
-                                <input type="checkbox" name="remember" id="remember">
-                                <label for="remember">{{ __('adminlte::adminlte.remember_me') }}</label>
-                            </div>
-                        </div>
                         <div class="col-4">
                             <button type="submit" class="btn btn-primary btn-block btn-flat">
-                                {{ __('adminlte::adminlte.sign_in') }}
+                                Login
                             </button>
                         </div>
                     </div>
                 </form>
-                <p class="mt-2 mb-1">
-                    <a href="{{ $password_reset_url }}">
-                        {{ __('adminlte::adminlte.i_forgot_my_password') }}
-                    </a>
-                </p>
-                @if ($register_url)
-                    <p class="mb-0">
-                        <a href="{{ $register_url }}">
-                            {{ __('adminlte::adminlte.register_a_new_membership') }}
-                        </a>
-                    </p>
-                @endif
             </div>
         </div>
     </div>

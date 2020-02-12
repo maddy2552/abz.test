@@ -1,5 +1,5 @@
-@extends('layouts.app')
-
+@extends('adminlte::page')
+@section('title', 'Dashboard')
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    Hello, {{\Illuminate\Support\Facades\Auth::user()->name}}.
                 </div>
             </div>
         </div>
