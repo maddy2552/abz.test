@@ -24,7 +24,7 @@ class StorePositionRequest extends FormRequest
     public function rules()
     {
         return [
-            'positionName' => 'required|max:256',
+            'name' => 'required|max:256',
         ];
     }
 }

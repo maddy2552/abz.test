@@ -22,6 +22,7 @@ class CreateEmployeesTable extends Migration
             $table->mediumInteger('salary')->nullable(false)->unsigned();
             $table->bigInteger('head')->nullable(true)->unsigned();
             $table->string('photo', 256)->nullable(false);
+            $table->dateTime('date_of_employment')->nullable(false);
             $table->bigInteger('admin_created_id')->nullable(false)->unsigned();
             $table->bigInteger('admin_updated_id')->nullable(false)->unsigned();
             $table->timestamps();

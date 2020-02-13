@@ -11,6 +11,7 @@ $factory->define(Employee::class, function (Faker $faker) {
         'phone' => $faker->regexify('\+380[9][95678][0-9]{7}'),
         'email' => $faker->safeEmail,
         'salary' => $faker->numberBetween(1, 500000),
-        'photo' => $faker->imageUrl(300, 300),
+        'photo' => $faker->numberBetween(1, 5).'.jpg',
+        'date_of_employment' => $faker->dateTime,
     ];
 });

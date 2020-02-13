@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Position;
 use Illuminate\Support\ServiceProvider;
+use App\Observers\PositionObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+
     }
 
     /**
@@ -23,6 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Position::observe(PositionObserver::class);
     }
 }

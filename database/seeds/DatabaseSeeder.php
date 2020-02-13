@@ -5,9 +5,6 @@ use App\Position;
 use App\Employee;
 use Illuminate\Database\Seeder;
 use Faker\Factory;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Carbon;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,6 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        Position::unsetEventDispatcher();
+
         $faker = Factory::create();
 
         // Добавил 10 юзеров (админов) с ид от 1 до 10.
@@ -45,5 +44,7 @@ class DatabaseSeeder extends Seeder
             ]);
             $headLevel = ($headLevel == 5) ? 0 : ++$headLevel;
         }
+
+        Position::setEventDispatcher(new \Illuminate\Events\Dispatcher);
     }
 }

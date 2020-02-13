@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePositionRequest;
 use App\Position;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PositionController extends Controller
 {
@@ -31,13 +32,16 @@ class PositionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  StorePositionRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(StorePositionRequest $request)
     {
-        $request->flash();
         $validatedData = $request->validated();
+        Position::create([
+            'name' => $validatedData['name'],
+        ]);
+        return redirect()->route('positions.index');
     }
 
     /**
@@ -59,19 +63,22 @@ class PositionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $position = Position::findOrFail($id);
+        return view('positions.edit', ['position' => $position]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  StorePositionRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StorePositionRequest $request, $id)
     {
-        //
+        $validatedData = $request->validated();
+        Position::find($id)->update(['name' => $validatedData['name']]);
+        return redirect()->route('positions.index');
     }
 
     /**

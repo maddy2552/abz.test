@@ -19,8 +19,9 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('datatables/positions', 'DatatableController@getPositions')->name('datatables.getPositions')->middleware('auth');;
+Route::get('datatables/employees', 'DatatableController@getEmployees')->name('datatables.getEmployees')->middleware('auth');;
+Route::get('employees/find{term?}', 'EmployeeController@find')->name('employees.find')->middleware('auth');
+
 Route::resource('employees', 'EmployeeController')->middleware('auth');
-
-Route::get('datatables', 'DatatableController@anyData')->name('datatables.data');
-
 Route::resource('positions', 'PositionController')->middleware('auth');

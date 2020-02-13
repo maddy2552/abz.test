@@ -1,14 +1,12 @@
 @extends('adminlte::page')
 @section('title', 'Positions')
 @section('content_header')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <h1 class="float-left">Positions</h1>
-            </div>
-            <div class="col">
-                <a href="{{ route('positions.create') }}" class="btn btn-info float-right">Add position</a>
-            </div>
+    <div class="row">
+        <div class="col">
+            <h1 class="float-left">Positions</h1>
+        </div>
+        <div class="col">
+            <a href="{{ route('positions.create') }}" class="btn btn-info float-right">Add position</a>
         </div>
     </div>
 @stop
@@ -21,7 +19,7 @@
                 <tr>
                     <th>Name</th>
                     <th style="width: 6em">Last update</th>
-                    <th style="width: 8em">Action</th>
+                    <th style="width: 4em">Action</th>
                 </tr>
                 </thead>
             </table>
@@ -31,7 +29,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Deleting</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -56,7 +54,7 @@
             $('#positions-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{!! route('datatables.data') !!}',
+                ajax: '{!! route('datatables.getPositions') !!}',
                 columns: [
                     { data: 'name', name: 'name' },
                     { data: 'updated_at', name: 'updated_at' },
@@ -64,7 +62,7 @@
                 ]
             });
             $('#positions-table').on('click', '.btn-delete', function () {
-                let name = 'Are u sure to delete ' + $(this).parents('tr').find('.sorting_1').html() + '?';
+                let name = 'Are u sure to delete ' + $(this).parents('tr').find('td').html() + '?';
                 let route = $(this).attr('data-id');
                 $('#exampleModal .modal-body').html(name);
                 $('#exampleModal .modal-footer form').attr('action', route);

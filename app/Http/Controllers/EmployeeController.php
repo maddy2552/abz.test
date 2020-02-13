@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Employee;
+use App\Position;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
+use Psy\Util\Json;
 
 class EmployeeController extends Controller
 {
@@ -24,7 +26,30 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        //
+        return view('employees.create', [
+            'positions' => Position::all(),
+        ]);
+    }
+
+    /**
+     * Process autocomplete ajax request.
+     *
+     * @param  Request  $request
+     * @return Json
+     */
+    public function find(Request $request)
+    {
+        $search = $request->get('term');
+        $result = Employee::query()
+            ->where('full_name', 'LIKE', "%{$search}%")
+            ->limit(10)
+            ->get();
+        $resultArr = [];
+        foreach ($result as $employee)
+        {
+            array_push($resultArr, $employee->full_name);
+        }
+        return Json::encode($resultArr);
     }
 
     /**
