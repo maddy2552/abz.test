@@ -12,15 +12,36 @@
                     <h3 class="card-title">Add Employee</h3>
                 </div>
 
-                <form role="form" action="{{ route('employees.store') }}" method="post">
+                <form enctype="multipart/form-data" action="{{ route('employees.store') }}" method="post">
                     @csrf
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="inputName">Name</label>
-                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="inputName" name="name" data-field="item" placeholder="Name" value="{{ old('name') }}">
+                            <label for="inputPhoto">Photo</label>
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input @error('photo') is-invalid @enderror" id="inputPhoto" name="photo">
+                                    <label class="custom-file-label" for="inputPhoto">Choose photo</label>
+                                </div>
+                            </div>
                             <div class="container">
                                 <div class="row">
-                                    @error('name')
+                                    @error('photo')
+                                    <div class="col p-0">
+                                        <span class="error invalid-feedback" style="display: block">{{ $message }}</span>
+                                    </div>
+                                    @enderror
+                                    <div class="col p-0">
+                                        <small class="text-muted float-right">File format jpg, png up to 5MB, the min. size of 300x300px</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputName">Full Name</label>
+                            <input type="text" class="form-control @error('fullName') is-invalid @enderror" id="inputName" name="fullName" data-field="item" placeholder="Name" value="{{ old('fullName') }}">
+                            <div class="container">
+                                <div class="row">
+                                    @error('fullName')
                                     <div class="col p-0">
                                         <span class="error invalid-feedback" style="display: block">{{ $message }}</span>
                                     </div>
@@ -104,8 +125,21 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
+                        <div class="form-group">
+                            <label for="inputDate">Date of employment</label>
+                            <input type="text" class="form-control @error('date') is-invalid @enderror" id="inputDate" name="date" value="{{ old('date') }}">
+                            <div class="container">
+                                <div class="row">
+                                    @error('date')
+                                    <div class="col p-0">
+                                        <span class="error invalid-feedback" style="display: block">{{ $message }}</span>
+                                    </div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card-footer">
                         <a href="{{ route('employees.index') }}" class="btn btn-default">Cancel</a>
                         <button type="submit" class="btn btn-primary">Save</button>
@@ -119,8 +153,17 @@
 @push('scripts')
     <script>
         $(function () {
+            $(document).ready(function () {
+                bsCustomFileInput.init();
+            });
+
+            $('#inputDate').datepicker({
+                format: "dd.mm.yy",
+                autoclose: true
+            });
+
             $('#inputPhone').mask("+38R (00) 0000000", {placeholder: "+380 (__) _______", translation: { 'R' : { pattern: /[0]/, optional: false }}});
-            $('#inputSalary').mask("000,000");
+            $('#inputSalary').mask("000.000");
 
             $('#inputHead').autocomplete({
                 source: '{!! route('employees.find') !!}',

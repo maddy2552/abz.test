@@ -7,6 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'full_name',
+        'email',
+        'photo',
+        'phone',
+        'position_id',
+        'salary',
+        'date_of_employment',
+        'head'
+    ];
+
+    /**
      * The attributes that should be mutated to dates.
      *
      * @var array
@@ -19,5 +35,10 @@ class Employee extends Model
     public function position()
     {
         return $this->belongsTo('App\Position');
+    }
+
+    public static function findByName($name)
+    {
+        return Employee::where('full_name', '=', trim($name))->first();
     }
 }

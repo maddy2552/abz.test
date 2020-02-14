@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-datepicker.min.css') }}">
 </head>
 <body class="@yield('classes_body')" @yield('body_data')>
 
@@ -44,6 +45,8 @@
 @endif
 <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="//ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
+<script src="{{ asset('js/bs-custom-file-input.min.js') }}"></script>
+<script src="{{ asset('js/bootstrap-datepicker.min.js') }}"></script>
 <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 <!-- App scripts -->

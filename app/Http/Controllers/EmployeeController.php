@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Employee;
+use App\Http\Requests\StoreEmployeeRequest;
 use App\Position;
+use App\Services\EmployeeService;
 use Illuminate\Http\Request;
 use Psy\Util\Json;
+use Illuminate\Support\Facades\Auth;
 
 class EmployeeController extends Controller
 {
@@ -35,14 +38,13 @@ class EmployeeController extends Controller
      * Process autocomplete ajax request.
      *
      * @param  Request  $request
-     * @return Json
+     * @return string
      */
     public function find(Request $request)
     {
         $search = $request->get('term');
-        $result = Employee::query()
-            ->where('full_name', 'LIKE', "%{$search}%")
-            ->limit(10)
+        $result = Employee::where('full_name', 'LIKE', "%{$search}%")
+            ->limit(8)
             ->get();
         $resultArr = [];
         foreach ($result as $employee)
@@ -55,12 +57,27 @@ class EmployeeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  StoreEmployeeRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreEmployeeRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+        $formatedData = EmployeeService::formatData($validatedData);
+        $formatedData['photo'] = EmployeeService::uploadPhoto($validatedData['photo']);
+
+        Employee::create([
+            'photo' => $formatedData['photo'],
+            'full_name' => $formatedData['fullName'],
+            'phone' => $formatedData['phone'],
+            'email' => $formatedData['email'],
+            'salary' => $formatedData['salary'],
+            'head' => $formatedData['head'],
+            'date_of_employment' => $formatedData['date'],
+            'position_id' => $formatedData['position']->id
+        ]);
+
+        return redirect()->route('employees.index');
     }
 
     /**
