@@ -55,19 +55,30 @@ class Employee extends Model
     {
         return Employee::where('full_name', '=', trim($name))->first();
     }
-
+    public static $count = 0;
     public static function checkIerarchy($emplId)
     {
-        dd(Employee::find($emplId)->chief);
-        if($emp !== null)
+        $emp = Employee::with(['chief'])->find($emplId);
+        if($emp->head !== null)
         {
-            self::$iLevel++;
+            self::$count++;
+            dump(self::$count);
             self::checkIerarchy($emp->head);
         }
-        else
+        return self::$count;
+    }
+
+    public static $ierar = 0;
+    public static function checkReverse($emplId)
+    {
+        $emp = Employee::where('head', '=', $emplId)->first();
+        if($emp !== null)
         {
-            return self::$iLevel;
+            self::$ierar++;
+            dump(self::$ierar);
+            self::checkReverse($emp->id);
         }
+        return self::$ierar;
     }
 
     public static function findByNameAsArr(string $name, int $limit)

@@ -27,5 +27,6 @@ Route::resource('employees', 'EmployeeController')->middleware('auth');
 Route::resource('positions', 'PositionController')->middleware('auth');
 
 Route::get('check', function () {
-  \App\Employee::checkIerarchy(1);
+  $result = \App\Employee::checkIerarchy(6) + \App\Employee::checkReverse(6);
+  dump($result.' - $result');
 });
