@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Employee;
 use App\Observers\EmployeeObserver;
 use App\Position;
+use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use App\Observers\PositionObserver;
 use Illuminate\Support\Facades\Validator;
@@ -57,12 +58,19 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Validator::extend('head', function ($attribute, $value, $parameters, $validator) {
-            $result = Employee::findByName($value);
-
-            if ($result === null) {
-                return false;
+            if($value === null)
+            {
+                return true;
             }
-            return true;
+            else
+            {
+                $result = Employee::findByNameFirst($value);
+
+                if ($result === null) {
+                    return false;
+                }
+                return true;
+            }
         });
     }
 }

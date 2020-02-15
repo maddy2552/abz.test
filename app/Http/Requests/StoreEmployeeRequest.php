@@ -24,21 +24,22 @@ class StoreEmployeeRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email',
+            'email' => 'required|email:rfc,dns,filter',
             'fullName' => 'required|max:256',
             'photo' => 'required|max:5120|mimes:jpeg,png|dimensions:min_width=300,min_height=300',
-            'position' => 'required|int',
+            'position' => 'required|int|exists:positions,id',
             'salary' => 'required|numeric|between:1,500000',
             'phone' => 'required|phone:12',
             'date' => 'required|date_format:d.m.y',
-            'head' => 'required|exists:employees,full_name'
+            'head' => 'head'
         ];
     }
 
     public function messages()
     {
         return [
-            'phone.phone' => 'Invalid phone format.'
+            'phone.phone' => 'Invalid phone format.',
+            'head.head' => 'There is no such person in the database.',
         ];
     }
 }

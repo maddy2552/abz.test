@@ -17,7 +17,7 @@ class AddEmployeesPositionIdForeign extends Migration
             $table->foreign('position_id')
                 ->references('id')
                 ->on('positions')
-                ->onDelete('cascade');
+                ->onDelete('set null');
         });
     }
 

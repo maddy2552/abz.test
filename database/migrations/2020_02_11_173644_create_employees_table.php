@@ -18,7 +18,7 @@ class CreateEmployeesTable extends Migration
             $table->string('full_name', 256)->nullable(false);
             $table->string('phone', 25)->nullable(false);
             $table->string('email', 256)->nullable(false);
-            $table->bigInteger('position_id')->nullable(false)->unsigned();
+            $table->bigInteger('position_id')->nullable(true)->unsigned();
             $table->mediumInteger('salary')->nullable(false)->unsigned();
             $table->bigInteger('head')->nullable(true)->unsigned();
             $table->string('photo', 256)->nullable(false);

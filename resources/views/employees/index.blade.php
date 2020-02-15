@@ -76,14 +76,11 @@
                         }
                     },
                     { data: 'full_name'},
-                    { data: 'position_id'},
+                    { data: 'position_id' },
                     { data: 'date_of_employment'},
                     { data: 'phone' },
                     { data: 'email' },
-                    { data: 'salary', 'render' : function (salary, type, obj, param4) {
-                            console.log(param4);
-                            return salary;
-                        }},
+                    { data: 'salary' },
                     { data: 'action', orderable: false, searchable: false }
                 ]
             });

@@ -64,6 +64,44 @@ class EmployeeObserver
     }
 
     /**
+     * Handle the employee "deleting" event.
+     * Переподчинение сотрудников
+     *
+     * @param  \App\Employee  $employee
+     * @return void
+     */
+    public function deleting(Employee $employee)
+    {
+        // Нахожу всех подчиненных удаляемого сотрудника.
+        $employees = Employee::where('head', '=', $employee->id)->get();
+        // Если таковых не имеется - ничего не делаю.
+        if($employees->isNotEmpty())
+        {
+            // Нахожу начальника удаляемого сотрудника
+            $employeeHead = Employee::find($employee->head);
+
+            // Прохожу по каждому подчиненному удаляемого сотрудника
+            $employees->each(function ($employee, $key) use ($employeeHead){
+                // Если у удаляемого сотрудника есть начальник, то даю ему в подчинение подчиненных удаляемого сотрудника
+                // Если начальника нет - ставлю поле "head" подчиненных в null
+                if($employeeHead !== null)
+                {
+                    // Проверка, чтобы не назначить сотрудника начальником самого себя
+                    $employee->update([
+                        'head' => ($employee->id !== $employeeHead->id) ? $employeeHead->id : null
+                    ]);
+                }
+                else
+                {
+                    $employee->update([
+                        'head' => null,
+                    ]);
+                }
+            });
+        }
+    }
+
+    /**
      * Handle the employee "restored" event.
      *
      * @param  \App\Employee  $employee

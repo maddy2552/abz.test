@@ -25,3 +25,7 @@ Route::get('employees/find{term?}', 'EmployeeController@find')->name('employees.
 
 Route::resource('employees', 'EmployeeController')->middleware('auth');
 Route::resource('positions', 'PositionController')->middleware('auth');
+
+Route::get('check', function () {
+  \App\Employee::checkIerarchy(1);
+});

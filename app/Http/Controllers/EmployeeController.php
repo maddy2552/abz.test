@@ -7,6 +7,7 @@ use App\Http\Requests\StoreEmployeeRequest;
 use App\Position;
 use App\Services\EmployeeService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Psy\Util\Json;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,15 +44,8 @@ class EmployeeController extends Controller
     public function find(Request $request)
     {
         $search = $request->get('term');
-        $result = Employee::where('full_name', 'LIKE', "%{$search}%")
-            ->limit(8)
-            ->get();
-        $resultArr = [];
-        foreach ($result as $employee)
-        {
-            array_push($resultArr, $employee->full_name);
-        }
-        return Json::encode($resultArr);
+        $names = Employee::findByNameAsArr($search, 8);
+        return Json::encode($names);
     }
 
     /**
@@ -99,7 +93,12 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $employee = Employee::with(['position', 'chief'])->find($id);
+        $positions = Position::all();
+        return view('employees.edit', [
+            'employee' => $employee,
+            'positions' => $positions,
+        ]);
     }
 
     /**
@@ -109,9 +108,31 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreEmployeeRequest $request, $id)
     {
-        //
+        $validatedData = $request->validated();
+        $employee = Employee::find($id);
+        $formatedData = EmployeeService::formatData($validatedData);
+
+        if($employee->id === $formatedData['head'])
+        {
+            $request->session()->flash('error', 'You cannot set yourself as the head.');
+            return redirect()->route('employees.edit', $id);
+        }
+        $formatedData['photo'] = EmployeeService::uploadPhoto($validatedData['photo'], $employee->photo);
+
+        $employee->update([
+            'photo' => $formatedData['photo'],
+            'full_name' => $formatedData['fullName'],
+            'phone' => $formatedData['phone'],
+            'email' => $formatedData['email'],
+            'salary' => $formatedData['salary'],
+            'head' => $formatedData['head'],
+            'date_of_employment' => $formatedData['date'],
+            'position_id' => $formatedData['position']->id
+        ]);
+
+        return redirect()->route('employees.index');
     }
 
     /**
@@ -122,6 +143,12 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $employee = Employee::find($id);
+//        if(File::exists(public_path('uploads/'.$employee->photo)))
+//        {
+//            File::delete(public_path('uploads/'.$employee->photo));
+//        }
+        $employee->delete();
+        return redirect()->route('employees.index');
     }
 }
