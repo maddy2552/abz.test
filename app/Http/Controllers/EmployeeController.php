@@ -136,7 +136,7 @@ class EmployeeController extends Controller
                 return redirect()->route('employees.edit', $id)->withInput();
             }
         }
-        
+
         $formatedData['photo'] = EmployeeService::uploadPhoto($validatedData['photo'], $employee->photo);
 
         $employee->update([
@@ -149,7 +149,6 @@ class EmployeeController extends Controller
             'date_of_employment' => $formatedData['date_of_employment'],
             'position_id' => $formatedData['position_id']->id
         ]);
-
 
         $employee->update([$formatedData]);
 
