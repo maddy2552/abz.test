@@ -58,6 +58,9 @@ class Employee extends Model
 
     public static function checkHierarchy($emplId)
     {
+        if($emplId === null){
+            return 0;
+        }
         $emp = Employee::find($emplId);
         if($emp->head !== null)
         {
@@ -69,6 +72,9 @@ class Employee extends Model
 
     public static function checkHierarchyReverse($emplId)
     {
+        if($emplId === null) {
+            return 0;
+        }
         if($emp = Employee::where('head', '=', $emplId)->get()) {
             $result = [0];
             $emp->each(function ($employee, $key) use (&$result){
@@ -76,7 +82,7 @@ class Employee extends Model
             });
             return max($result);
         }
-        else return [0];
+        else return 0;
     }
 
     public static function findByNameAsArr(string $name, int $limit)
