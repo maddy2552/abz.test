@@ -10,6 +10,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Observers\PositionObserver;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Schema;
+use function foo\func;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -73,6 +74,14 @@ class AppServiceProvider extends ServiceProvider
                 }
                 return true;
             }
+        });
+
+        Validator::extend('salary', function ($attribute, $value, $parameters, $validator) {
+            $value = str_replace('.', '', $value);
+            if((int)$value > 500000){
+                return false;
+            }
+            return true;
         });
     }
 }
