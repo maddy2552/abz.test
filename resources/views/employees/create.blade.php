@@ -114,14 +114,19 @@
 
                         <div class="form-group">
                             <label for="inputHead">Head</label>
-                            <input type="text" class="form-control @error('head') is-invalid @enderror" id="inputHead" name="head" value="{{ old('head') }}">
+                            <input type="text" class="form-control @error('head') is-invalid @enderror {{ Session::has('error') ? 'is-invalid' : '' }}" id="inputHead" name="head" value="{{ old('head') }}">
                             <div class="container">
                                 <div class="row">
                                     @error('head')
-                                    <div class="col p-0">
-                                        <span class="error invalid-feedback" style="display: block">{{ $message }}</span>
-                                    </div>
+                                        <div class="col p-0">
+                                            <span class="error invalid-feedback" style="display: block">{{ $message }}</span>
+                                        </div>
                                     @enderror
+                                    @if(Session::has('error'))
+                                        <div class="col p-0">
+                                            <span class="error invalid-feedback" style="display: block">{{ Session::get('error') }}</span>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

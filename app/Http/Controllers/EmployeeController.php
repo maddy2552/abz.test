@@ -60,6 +60,12 @@ class EmployeeController extends Controller
         $formatedData = EmployeeService::formatData($validatedData);
         $formatedData['photo'] = EmployeeService::uploadPhoto($validatedData['photo']);
 
+        if(Employee::checkHierarchy($formatedData['head']) >= 5)
+        {
+            $request->session()->flash('error', 'Maximum submission level is 5.');
+            return redirect()->route('employees.create')->withInput();
+        }
+
         Employee::create([
             'photo' => $formatedData['photo'],
             'full_name' => $formatedData['fullName'],
@@ -67,8 +73,8 @@ class EmployeeController extends Controller
             'email' => $formatedData['email'],
             'salary' => $formatedData['salary'],
             'head' => $formatedData['head'],
-            'date_of_employment' => $formatedData['date'],
-            'position_id' => $formatedData['position']->id
+            'date_of_employment' => $formatedData['date_of_employment'],
+            'position_id' => $formatedData['position_id']->id
         ]);
 
         return redirect()->route('employees.index');
@@ -119,6 +125,16 @@ class EmployeeController extends Controller
             $request->session()->flash('error', 'You cannot set yourself as the head.');
             return redirect()->route('employees.edit', $id);
         }
+
+        $iLevel = Employee::checkHierarchy($formatedData['head']) + Employee::checkHierarchyReverse($employee->id);
+
+        if($iLevel >= 5)
+        {
+            $request->session()->flash('error', 'Maximum submission level is 5.');
+            return redirect()->route('employees.edit', $id)->withInput();
+        }
+
+
         $formatedData['photo'] = EmployeeService::uploadPhoto($validatedData['photo'], $employee->photo);
 
         $employee->update([
@@ -128,9 +144,12 @@ class EmployeeController extends Controller
             'email' => $formatedData['email'],
             'salary' => $formatedData['salary'],
             'head' => $formatedData['head'],
-            'date_of_employment' => $formatedData['date'],
-            'position_id' => $formatedData['position']->id
+            'date_of_employment' => $formatedData['date_of_employment'],
+            'position_id' => $formatedData['position_id']->id
         ]);
+
+
+        $employee->update([$formatedData]);
 
         return redirect()->route('employees.index');
     }
@@ -144,10 +163,10 @@ class EmployeeController extends Controller
     public function destroy($id)
     {
         $employee = Employee::find($id);
-//        if(File::exists(public_path('uploads/'.$employee->photo)))
-//        {
-//            File::delete(public_path('uploads/'.$employee->photo));
-//        }
+        if(File::exists(public_path('uploads/'.$employee->photo)))
+        {
+            File::delete(public_path('uploads/'.$employee->photo));
+        }
         $employee->delete();
         return redirect()->route('employees.index');
     }

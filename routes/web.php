@@ -27,8 +27,3 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('employees', 'EmployeeController');
     Route::resource('positions', 'PositionController');
 });
-
-Route::get('check', function () {
-  $result = \App\Employee::checkIerarchy(4);
-  dump($result.' - $result');
-});

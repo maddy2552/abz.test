@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
+    public static $count = 0;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -28,8 +30,6 @@ class Employee extends Model
      * @var array
      */
     protected $dates = ['created_at', 'updated_at', 'date_of_employment'];
-
-    public static $iLevel = 0;
 
     /**
      * Get the Position that owns the Employee.
@@ -55,30 +55,28 @@ class Employee extends Model
     {
         return Employee::where('full_name', '=', trim($name))->first();
     }
-    public static $count = 0;
-    public static function checkIerarchy($emplId)
+
+    public static function checkHierarchy($emplId)
     {
         $emp = Employee::find($emplId);
         if($emp->head !== null)
         {
             self::$count++;
-            dump(self::$count);
-            self::checkIerarchy($emp->head);
+            self::checkHierarchy($emp->head);
         }
         return self::$count;
     }
 
-    public static $ierar = 0;
-    public static function checkReverse($emplId)
+    public static function checkHierarchyReverse($emplId)
     {
-        $emp = Employee::where('head', '=', $emplId)->get();
-        $emp->each(function ($employee, $key) {
-            self::$ierar++;
-            dump(self::$ierar);
-            self::checkReverse($employee->id);
-        });
-
-        return self::$ierar;
+        if($emp = Employee::where('head', '=', $emplId)->get()) {
+            $result = [0];
+            $emp->each(function ($employee, $key) use (&$result){
+                $result[] = 1 + self::checkHierarchyReverse($employee->id);
+            });
+            return max($result);
+        }
+        else return [0];
     }
 
     public static function findByNameAsArr(string $name, int $limit)

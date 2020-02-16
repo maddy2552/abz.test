@@ -139,7 +139,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group m-0">
                             <label for="inputDate">Date of employment</label>
                             <input type="text" class="form-control @error('date') is-invalid @enderror" id="inputDate" name="date" value="{{ $employee->date_of_employment->format('d.m.y') }}">
                             <div class="container">
@@ -149,6 +149,22 @@
                                         <span class="error invalid-feedback" style="display: block">{{ $message }}</span>
                                     </div>
                                     @enderror
+                                </div>
+                                <div class="row">
+                                    <div class="col p-0">
+                                        <p><b>Created at:</b> {{ $employee->created_at->format('d.m.y') }}</p>
+                                    </div>
+                                    <div class="col p-0">
+                                        <p class="float-right"><b>Admin created ID:</b> {{ $employee->admin_created_id }}</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col p-0">
+                                        <p><b>Updated at:</b> {{ $employee->updated_at->format('d.m.y') }}</p>
+                                    </div>
+                                    <div class="col p-0">
+                                        <p class="float-right"><b>Admin updated ID:</b> {{ $employee->admin_updated_id }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

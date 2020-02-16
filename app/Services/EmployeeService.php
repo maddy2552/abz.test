@@ -83,9 +83,9 @@ class EmployeeService
     {
         $data['phone'] = self::formatPhone($data['phone']);
         $data['salary'] = self::formatSalary($data['salary']);
-        $data['date'] = self::formatDate($data['date']);
+        $data['date_of_employment'] = self::formatDate($data['date']);
         $data['head'] = self::formatHead($data['head']);
-        $data['position'] = self::formatPosition($data['position']);
+        $data['position_id'] = self::formatPosition($data['position']);
 
         return $data;
     }
