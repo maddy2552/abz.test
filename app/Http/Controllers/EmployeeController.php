@@ -126,15 +126,17 @@ class EmployeeController extends Controller
             return redirect()->route('employees.edit', $id);
         }
 
-        $iLevel = Employee::checkHierarchy($formatedData['head']) + Employee::checkHierarchyReverse($employee->id);
-
-        if($iLevel >= 5)
+        if($validatedData['head'] !== null)
         {
-            $request->session()->flash('error', 'Maximum submission level is 5.');
-            return redirect()->route('employees.edit', $id)->withInput();
+            $iLevel = Employee::checkHierarchy($formatedData['head']) + Employee::checkHierarchyReverse($employee->id);
+
+            if($iLevel >= 5)
+            {
+                $request->session()->flash('error', 'Maximum submission level is 5.');
+                return redirect()->route('employees.edit', $id)->withInput();
+            }
         }
-
-
+        
         $formatedData['photo'] = EmployeeService::uploadPhoto($validatedData['photo'], $employee->photo);
 
         $employee->update([
