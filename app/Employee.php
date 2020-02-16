@@ -58,7 +58,7 @@ class Employee extends Model
     public static $count = 0;
     public static function checkIerarchy($emplId)
     {
-        $emp = Employee::with(['chief'])->find($emplId);
+        $emp = Employee::find($emplId);
         if($emp->head !== null)
         {
             self::$count++;
@@ -71,13 +71,13 @@ class Employee extends Model
     public static $ierar = 0;
     public static function checkReverse($emplId)
     {
-        $emp = Employee::where('head', '=', $emplId)->first();
-        if($emp !== null)
-        {
+        $emp = Employee::where('head', '=', $emplId)->get();
+        $emp->each(function ($employee, $key) {
             self::$ierar++;
             dump(self::$ierar);
-            self::checkReverse($emp->id);
-        }
+            self::checkReverse($employee->id);
+        });
+
         return self::$ierar;
     }
 

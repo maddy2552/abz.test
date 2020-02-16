@@ -19,14 +19,16 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('datatables/positions', 'DatatableController@getPositions')->name('datatables.getPositions')->middleware('auth');;
-Route::get('datatables/employees', 'DatatableController@getEmployees')->name('datatables.getEmployees')->middleware('auth');;
-Route::get('employees/find{term?}', 'EmployeeController@find')->name('employees.find')->middleware('auth');
+Route::middleware(['auth'])->group(function () {
+    Route::get('datatables/positions', 'DatatableController@getPositions')->name('datatables.getPositions');
+    Route::get('datatables/employees', 'DatatableController@getEmployees')->name('datatables.getEmployees');
+    Route::get('employees/find{term?}', 'EmployeeController@find')->name('employees.find');
 
-Route::resource('employees', 'EmployeeController')->middleware('auth');
-Route::resource('positions', 'PositionController')->middleware('auth');
+    Route::resource('employees', 'EmployeeController');
+    Route::resource('positions', 'PositionController');
+});
 
 Route::get('check', function () {
-  $result = \App\Employee::checkIerarchy(6) + \App\Employee::checkReverse(6);
+  $result = \App\Employee::checkIerarchy(4);
   dump($result.' - $result');
 });
